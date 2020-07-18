@@ -1,27 +1,30 @@
 import Darwin
-import TSCBasic
-import TSCUtility
+import Foundation
 
-let animation = PercentProgressAnimation(
-  stream: stdoutStream,
-  header: "Loading Awesome Stuff ✨")
+let fileManager = FileManager.default
 
-for i in 0..<100 {
-  let second: Double = 1_000_000
-  usleep(UInt32(second * 0.05))
-  animation.update(step: i, total: 100, text: "Loading..")
-}
-
-animation.complete(success: true)
-print("Done! 🚀")
-
-let terminalController = TerminalController(stream: stdoutStream)
-
-let colors: [TerminalController.Color] = [
-  .noColor, .red, .green, .yellow, .cyan, .white, .black, .grey
-]
-
-for color in colors {
-  terminalController?.write("Hello World", inColor: color, bold: true)
-  terminalController?.endLine()
+//fileManager.fileExists(atPath: ".", isDirectory: &true)
+do {
+    let root = try fileManager.contentsOfDirectory(atPath: ".")
+    if root.contains(".build") {
+        let spm = try fileManager.contentsOfDirectory(atPath: ".build/")
+        if spm.contains("checkouts") {
+            let checkouts = try fileManager.contentsOfDirectory(atPath: ".build/checkouts")
+            try checkouts.forEach { package in
+                let files = try fileManager.contentsOfDirectory(atPath: ".build/checkouts/\(package)")
+                print(">>> \(package)")
+                try files.forEach { file in
+                    if file.contains("LICENSE") {
+                        let url = URL(fileURLWithPath: ".build/checkouts/\(package)/\(file)")
+                        let license = try String(contentsOf: url, encoding: .utf8)
+                        print(license)
+                    }
+                }
+                print(">>>")
+            }
+        }
+    }
+} catch {
+    print("coundn't read files: \(error.localizedDescription)")
+    exit(EXIT_FAILURE)
 }
