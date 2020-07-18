@@ -37,11 +37,11 @@ do {
     if root.contains("Pods") {
         let pods = try fileManager.contentsOfDirectory(atPath: "Pods/")
         try pods.forEach { pod in
-            let files = try fileManager.contentsOfDirectory(atPath: ".build/\(pod)")
+            let files = try fileManager.contentsOfDirectory(atPath: "Pods/\(pod)")
             print(">>> \(pod)")
             try files.forEach { file in
                 if file.contains("LICENSE") {
-                    let url = URL(fileURLWithPath: ".build/Pods/\(pod)/\(file)")
+                    let url = URL(fileURLWithPath: "Pods/\(pod)/\(file)")
                     let license = try String(contentsOf: url, encoding: .utf8)
                     print(license)
                 }
