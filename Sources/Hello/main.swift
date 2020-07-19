@@ -3,6 +3,17 @@ import Foundation
 
 let fileManager = FileManager.default
 
+// MARK: xcode spm
+do {
+    let swiftpm = try fileManager.contentsOfDirectory(atPath: "$PROJECT_FILE_PATH/project.xcworkspace/xcshareddata/swiftpm/")
+    swiftpm.forEach {
+        print($0)
+    }
+} catch {
+    print("coundn't read files: \(error.localizedDescription)")
+//    exit(EXIT_FAILURE)
+}
+
 // MARK: SPM
 do {
     let root = try fileManager.contentsOfDirectory(atPath: ".")
