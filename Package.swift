@@ -10,7 +10,8 @@ let package = Package(
         .iOS(.v13)
     ],
     products: [
-        .executable(name: "Hello", targets: ["Hello"])
+        .library(name: "Hello", targets: ["Hello"]),
+        .executable(name: "hello", targets: ["Hello"])
     ],
     dependencies: [
 //         .package(url: "https://github.com/apple/swift-tools-support-core.git",
