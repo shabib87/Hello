@@ -29,6 +29,8 @@ do {
                 // make sure this JSON is in the format we expect
                 if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                     // try to read out a string array
+                    print("got value man")
+                    print(json)
                     if let object = json["object"] as? [String] {
                         print(object)
                     }
