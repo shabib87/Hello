@@ -23,7 +23,11 @@ do {
             let url = URL(fileURLWithPath: path)
             let package = try String(contentsOf: url, encoding: .utf8)
             
-            let data = Data(package.utf8)
+            print(package)
+            guard let jsonData = package.data(using: .utf8) else {
+                print("could not make json data from string")
+                return
+            }
 
             do {
                 // make sure this JSON is in the format we expect
@@ -35,7 +39,7 @@ do {
 //                        print(object)
 //                    }
 //                }
-                let obj = try JSONDecoder().decode(PackageItems.self, from: data)
+                let obj = try JSONDecoder().decode(PackageItems.self, from: jsonData)
                 print("got value man")
                 print(obj)
             } catch let error as NSError {
