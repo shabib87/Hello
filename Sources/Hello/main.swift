@@ -10,47 +10,51 @@ let fileManager = FileManager.default
 // read package for github url
 // fetch license from github
 //$PROJECT_FILE_PATH/project.xcworkspace/xcshareddata/swiftpm/
-do {
-    var path = "\(fileManager.currentDirectoryPath)"
-    if let projName = path.components(separatedBy: "/").last {
-        path.append("/\(projName).xcodeproj/project.xcworkspace/xcshareddata/swiftpm/")
-        let swiftpm = try fileManager.contentsOfDirectory(atPath: path)
-        var isDir : ObjCBool = false
-        if swiftpm.contains("Package.resolved"),
-            fileManager.fileExists(atPath: "Package.resolved", isDirectory:&isDir),
-            !isDir.boolValue {
-            path.append("/Package.resolved")
-            let url = URL(fileURLWithPath: path)
-            let package = try String(contentsOf: url, encoding: .utf8)
-            
-            print(package)
-            guard let jsonData = package.data(using: .utf8) else {
-                print("could not make json data from string")
-                return
-            }
+func abc() {
+    do {
+        var path = "\(fileManager.currentDirectoryPath)"
+        if let projName = path.components(separatedBy: "/").last {
+            path.append("/\(projName).xcodeproj/project.xcworkspace/xcshareddata/swiftpm/")
+            let swiftpm = try fileManager.contentsOfDirectory(atPath: path)
+            var isDir : ObjCBool = false
+            if swiftpm.contains("Package.resolved"),
+                fileManager.fileExists(atPath: "Package.resolved", isDirectory:&isDir),
+                !isDir.boolValue {
+                path.append("/Package.resolved")
+                let url = URL(fileURLWithPath: path)
+                let package = try String(contentsOf: url, encoding: .utf8)
+                
+                print(package)
+                guard let jsonData = package.data(using: .utf8) else {
+                    print("could not make json data from string")
+                    return
+                }
 
-            do {
-                // make sure this JSON is in the format we expect
-//                if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-//                    // try to read out a string array
-//                    print("got value man")
-//                    print(json)
-//                    if let object = json["object"] as? [String] {
-//                        print(object)
-//                    }
-//                }
-                let obj = try JSONDecoder().decode(PackageItems.self, from: jsonData)
-                print("got value man")
-                print(obj)
-            } catch let error as NSError {
-                print("Failed to load: \(error.localizedDescription)")
+                do {
+                    // make sure this JSON is in the format we expect
+    //                if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+    //                    // try to read out a string array
+    //                    print("got value man")
+    //                    print(json)
+    //                    if let object = json["object"] as? [String] {
+    //                        print(object)
+    //                    }
+    //                }
+                    let obj = try JSONDecoder().decode(PackageItems.self, from: jsonData)
+                    print("got value man")
+                    print(obj)
+                } catch let error as NSError {
+                    print("Failed to load: \(error.localizedDescription)")
+                }
             }
         }
+    } catch {
+        print("coundn't read files: \(error.localizedDescription)")
+        //    exit(EXIT_FAILURE)
     }
-} catch {
-    print("coundn't read files: \(error.localizedDescription)")
-    //    exit(EXIT_FAILURE)
 }
+
+abc()
 
 let url1 = URL(string: "https://api.github.com/repos/nalexn/ViewInspector/license")!
 
