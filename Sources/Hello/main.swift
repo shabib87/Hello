@@ -10,11 +10,14 @@ let fileManager = FileManager.default
 // fetch license from github
 //$PROJECT_FILE_PATH/project.xcworkspace/xcshareddata/swiftpm/
 do {
-    let path = "\(fileManager.currentDirectoryPath)"
-    
-    let swiftpm = try fileManager.contentsOfDirectory(atPath: path)
-    swiftpm.forEach {
-        print($0)
+    var path = "\(fileManager.currentDirectoryPath)"
+    if let projName = path.components(separatedBy: "/").last {
+        path.append("/\(projName).xcodeproj/project.xcworkspace/xcshareddata/swiftpm/")
+        let swiftpm = try fileManager.contentsOfDirectory(atPath: path)
+        print(path)
+        swiftpm.forEach {
+            print($0)
+        }
     }
 } catch {
     print("coundn't read files: \(error.localizedDescription)")
