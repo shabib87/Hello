@@ -44,12 +44,12 @@ func abc() {
                     print("got value man")
                     print(obj)
                 } catch let error as NSError {
-                    print("Failed to load: \(error.localizedDescription)")
+                    print("Failed to load: \(error)")
                 }
             }
         }
     } catch {
-        print("coundn't read files: \(error.localizedDescription)")
+        print("coundn't read files: \(error)")
         //    exit(EXIT_FAILURE)
     }
 }
