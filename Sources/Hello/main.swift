@@ -27,14 +27,17 @@ do {
 
             do {
                 // make sure this JSON is in the format we expect
-                if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-                    // try to read out a string array
-                    print("got value man")
-                    print(json)
-                    if let object = json["object"] as? [String] {
-                        print(object)
-                    }
-                }
+//                if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+//                    // try to read out a string array
+//                    print("got value man")
+//                    print(json)
+//                    if let object = json["object"] as? [String] {
+//                        print(object)
+//                    }
+//                }
+                let obj = try JSONDecoder().decode(PackageItems.self, from: data)
+                print("got value man")
+                print(obj)
             } catch let error as NSError {
                 print("Failed to load: \(error.localizedDescription)")
             }
