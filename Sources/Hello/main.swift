@@ -14,14 +14,19 @@ do {
     if let projName = path.components(separatedBy: "/").last {
         path.append("/\(projName).xcodeproj/project.xcworkspace/xcshareddata/swiftpm/")
         let swiftpm = try fileManager.contentsOfDirectory(atPath: path)
-        print(path)
-        swiftpm.forEach {
-            print($0)
+        var isDir : ObjCBool = false
+        if swiftpm.contains("Package.resolved"),
+            fileManager.fileExists(atPath: "Package.resolved", isDirectory:&isDir),
+            !isDir.boolValue {
+            path.append("/Package.resolved")
+            let url = URL(fileURLWithPath: path)
+            let package = try String(contentsOf: url, encoding: .utf8)
+            print(package)
         }
     }
 } catch {
     print("coundn't read files: \(error.localizedDescription)")
-//    exit(EXIT_FAILURE)
+    //    exit(EXIT_FAILURE)
 }
 
 // MARK: SPM
