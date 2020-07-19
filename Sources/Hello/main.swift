@@ -31,18 +31,42 @@ func abc() {
                 }
 
                 do {
-                    // make sure this JSON is in the format we expect
-    //                if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-    //                    // try to read out a string array
-    //                    print("got value man")
-    //                    print(json)
-    //                    if let object = json["object"] as? [String] {
-    //                        print(object)
-    //                    }
-    //                }
-                    let obj = try JSONDecoder().decode(PackageItems.self, from: jsonData)
+                    let obj = try JSONDecoder().decode(Obbb.self, from: jsonData)
                     print("got value man")
-                    print(obj)
+                    
+                    obj.object.pins.forEach { pin in
+                        print(pin.repositoryURL)
+                        let repo = pin.repositoryURL.components(separatedBy: "/")
+                        
+                        if repo.count > 3 {
+                            let owner = repo[3]
+                            let repo = pin.package
+                            
+                            let urlStr = "https://api.github.com/repos/\(owner)/\(repo)/license"
+                            print(urlStr)
+                            
+                            guard let url = URL(string: urlStr) else {
+                                return
+                            }
+                            
+                            cancellable = URLSession.shared.dataTaskPublisher(for: url)
+                                .sink(receiveCompletion: {
+                                    switch $0 {
+                                    case .finished:
+                                        exit(EXIT_SUCCESS)
+                                    case let .failure(error):
+                                        print(error)
+                                        exit(EXIT_FAILURE)
+                                    }
+                                }, receiveValue: {
+                                    let responseText = String(data: $0.data, encoding: .utf8)!
+                                    print(responseText)
+                                })
+
+                            RunLoop.current.run()
+                        }
+                    }
+                    
                 } catch let error as NSError {
                     print("Failed to load: \(error)")
                 }
@@ -56,7 +80,80 @@ func abc() {
 
 abc()
 
-let url1 = URL(string: "https://api.github.com/repos/nalexn/ViewInspector/license")!
+var cancellable: AnyCancellable?
+
+//func def() {
+//    let json = """
+//{
+//  "object": {
+//    "pins": [
+//      {
+//        "package": "ViewInspector",
+//        "repositoryURL": "https://github.com/nalexn/ViewInspector",
+//        "state": {
+//          "branch": null,
+//          "revision": "7a672b0a4c730d829ace40918bd65c21c2f356d9",
+//          "version": "0.4.0"
+//        }
+//      }
+//    ]
+//  },
+//  "version": 1
+//}
+//"""
+//    
+//    guard let jsonData = json.data(using: .utf8) else {
+//        print("could not make json data from string")
+//        return
+//    }
+//
+//    do {
+//        let obj = try JSONDecoder().decode(Obbb.self, from: jsonData)
+//        print("got value man")
+//        obj.object.pins.forEach { pin in
+//            print(pin.repositoryURL)
+//            let repo = pin.repositoryURL.components(separatedBy: "/")
+//            
+//            if repo.count > 3 {
+//                let owner = repo[3]
+//                let repo = pin.package
+//                
+//                let urlStr = "https://api.github.com/repos/\(owner)/\(repo)/license"
+//                print(urlStr)
+//                
+//                guard let url = URL(string: urlStr) else {
+//                    return
+//                }
+//                
+//                cancellable = URLSession.shared.dataTaskPublisher(for: url)
+//                    .sink(receiveCompletion: {
+//                        switch $0 {
+//                        case .finished:
+//                            exit(EXIT_SUCCESS)
+//                        case let .failure(error):
+//                            print(error)
+//                            exit(EXIT_FAILURE)
+//                        }
+//                    }, receiveValue: {
+//                        let responseText = String(data: $0.data, encoding: .utf8)!
+//                        print(responseText)
+//                    })
+//
+//                RunLoop.current.run()
+//            }
+//        }
+//    } catch let error as NSError {
+//        print("Failed to load: \(error)")
+//    }
+//}
+
+//def()
+
+//let url1 = URL(string: "https://api.github.com/repos/nalexn/ViewInspector/license")!
+
+struct Obbb: Decodable {
+    let object: PackageItems
+}
 
 struct PackageItems: Codable {
     let pins: [PackageObj]
