@@ -53,6 +53,9 @@ func getLicenseFromXcodeManagedSPM() {
                                 return
                             }
                             
+                            let decoder = JSONDecoder()
+                            decoder.keyDecodingStrategy = .convertFromSnakeCase
+                            
                             cancellable = URLSession.shared.dataTaskPublisher(for: url)
                                 .tryMap { data, response -> Data in
                                     if let response = response as? HTTPURLResponse,
@@ -62,7 +65,7 @@ func getLicenseFromXcodeManagedSPM() {
 
                                     return data
                                 }
-                            .decode(type: LicenseInfo.self, decoder: JSONDecoder())
+                            .decode(type: LicenseInfo.self, decoder: decoder)
                                 .sink(receiveCompletion: {
                                     switch $0 {
                                     case .finished:
