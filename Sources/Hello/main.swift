@@ -1,5 +1,6 @@
 import Darwin
 import Foundation
+import Combine
 
 let fileManager = FileManager.default
 
@@ -21,13 +22,43 @@ do {
             path.append("/Package.resolved")
             let url = URL(fileURLWithPath: path)
             let package = try String(contentsOf: url, encoding: .utf8)
-            print(package)
+            
+            let data = Data(package.utf8)
+
+            do {
+                // make sure this JSON is in the format we expect
+                if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                    // try to read out a string array
+                    if let object = json["object"] as? [String] {
+                        print(object)
+                    }
+                }
+            } catch let error as NSError {
+                print("Failed to load: \(error.localizedDescription)")
+            }
         }
     }
 } catch {
     print("coundn't read files: \(error.localizedDescription)")
     //    exit(EXIT_FAILURE)
 }
+
+let url1 = URL(string: "https://api.github.com/repos/nalexn/ViewInspector/license")!
+
+struct PackageItems: Codable {
+    let pins: [PackageObj]
+}
+
+struct PackageObj: Codable {
+    let package: String
+    let repositoryURL: String
+    let state: PackageObjState
+}
+
+struct PackageObjState: Codable {
+    let version: String
+}
+
 
 // MARK: SPM
 //do {
