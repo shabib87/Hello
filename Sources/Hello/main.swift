@@ -4,9 +4,15 @@ import Foundation
 let fileManager = FileManager.default
 
 // MARK: xcode spm
+// Get .xcworkspace name from console input/yml config file
+// Get Package.resolved from .xcworkspace
+// read package for github url
+// fetch license from github
 //$PROJECT_FILE_PATH/project.xcworkspace/xcshareddata/swiftpm/
 do {
-    let swiftpm = try fileManager.contentsOfDirectory(atPath: "$PROJECT_FILE_PATH/")
+    let path = "\(fileManager.currentDirectoryPath)"
+    
+    let swiftpm = try fileManager.contentsOfDirectory(atPath: path)
     swiftpm.forEach {
         print($0)
     }
