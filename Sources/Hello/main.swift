@@ -6,7 +6,7 @@ let fileManager = FileManager.default
 // MARK: xcode spm
 //$PROJECT_FILE_PATH/project.xcworkspace/xcshareddata/swiftpm/
 do {
-    let swiftpm = try fileManager.contentsOfDirectory(atPath: "$PROJECT_FILE_PATH/project.xcworkspace/xcshareddata/")
+    let swiftpm = try fileManager.contentsOfDirectory(atPath: "$PROJECT_FILE_PATH/")
     swiftpm.forEach {
         print($0)
     }
