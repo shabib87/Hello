@@ -20,7 +20,7 @@ do {
                         let files = try fileManager.contentsOfDirectory(atPath: ".build/checkouts/\(package)")
                         try files.forEach { file in
                             if file.contains("LICENSE"),
-                                fileManager.fileExists(atPath: ".build/checkouts", isDirectory:&isDir), !isDir.boolValue{
+                                fileManager.fileExists(atPath: ".build/checkouts", isDirectory:&isDir), isDir.boolValue {
                                 let url = URL(fileURLWithPath: ".build/checkouts/\(package)/\(file)")
                                 let license = try String(contentsOf: url, encoding: .utf8)
                                 print(license)
