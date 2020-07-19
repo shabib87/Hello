@@ -39,12 +39,14 @@ do {
         try pods.forEach { pod in
             let files = try fileManager.contentsOfDirectory(atPath: "Pods/\(pod)")
             print(">>> \(pod)")
-            try files.forEach { file in
-                if file.contains("LICENSE") {
-                    let url = URL(fileURLWithPath: "Pods/\(pod)/\(file)")
-                    let license = try String(contentsOf: url, encoding: .utf8)
-                    print(license)
-                }
+//            try
+                files.forEach { file in
+//                if file.contains("LICENSE") {
+//                    let url = URL(fileURLWithPath: "Pods/\(pod)/\(file)")
+//                    let license = try String(contentsOf: url, encoding: .utf8)
+//                    print(license)
+//                }
+                    print(file)
             }
             print(">>>")
         }
