@@ -11,7 +11,7 @@ enum SessionError: Error {
 var cancellable: AnyCancellable?
 
 
-//getLicenseFromLocalSPM()
-//getLicensenseFromCocopod()
-//getLicenseFromXcodeManagedSPM()
-TestLicenseDownload().testing()
+getLicenseFromLocalSPM()
+getLicensenseFromCocopod()
+getLicenseFromXcodeManagedSPM()
+//TestLicenseDownload().testing()
